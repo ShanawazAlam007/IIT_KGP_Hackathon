@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeBank - Login</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="top-banner">
+        <span><i class="fas fa-lock"></i> Secure Online Banking</span>
+        <span><i class="fas fa-mobile-alt"></i> 24/7 Support: 1-800-SAFEBANK</span>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <i class="fas fa-university"></i>
+            <h1>SafeBank</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-info-circle"></i> About</a>
+            <a href="#"><i class="fas fa-briefcase"></i> Services</a>
+            <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+        </div>
+    </nav>
+
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                    <h1>SafeBank</h1>
+                </div>
+                <p>Secure Access to Your Financial World</p>
+            </div>
+
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="Email">
+                        <i class="fas fa-user"></i>  Email
+                    </label>
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="Email" 
+                            name="Email" 
+                            placeholder="Enter your Email" 
+                            required 
+                            autocomplete="Email"
+                        >
+                        <span class="input-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <div class="input-wrapper password-wrapper">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Enter your password" 
+                            required 
+                            autocomplete="current-password"
+                        >
+                        <span class="input-icon password-toggle">
+                            <i class="fas fa-eye-slash"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="../forget_pass/forget-password.html" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <div class="form-group captcha-section">
+                    <div class="captcha-container">
+                        <div id="captcha-math" class="captcha-math">🔒 Solve</div>
+                        <input type="text" id="captcha-input" name="captcha" placeholder="Your answer" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button" id="login-btn" disabled>
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+
+                <div class="signup-link">
+                    New to SafeBank? 
+                    <a href="../signup_page/signup.html">Create Account</a>
+                </div>
+            </form>
+
+            <div class="login-footer">
+                <div class="security-info">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>256-bit Encryption</span>
+                </div>
+                <div class="support-info">
+                    <i class="fas fa-headset"></i>
+                    <span>24/7 Support</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+    <script src="captcha.js"></script>
+    <script>
+        document.getElementById('forgot-password').onclick(()=>{
+            window.location.heref="../forget_pass/forget-password.html"
+        })
+    </script>
+</body>
+</html>
