@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeBank - Dashboard</title>
+    <!-- Add this script tag in the <head> section of your HTML file -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- Add jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Add autoTable plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.1/jspdf.plugin.autotable.min.js"></script>
+
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fas fa-university"></i>
+                <h2>SafeBank</h2>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard" class="active" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a></li>
+                <li><a href="#transactions" data-tab="transactions">
+                        <i class="fas fa-exchange-alt"></i> Transactions
+                    </a></li>
+                <!-- <li><a href="#transaction-history" data-tab="transaction-history" id="last-transaction">
+                        <i class=" fas fa-history"></i> Transaction History
+                    </a></li> -->
+                <li><a href="#balance" data-tab="balance">
+                        <i class="fas fa-wallet"></i> Balance
+                    </a></li>
+                <li><a href="#bank-statement" data-tab="bank-statement">
+                        <i class="fas fa-file-invoice-dollar"></i> Bank Statement
+                    </a></li>
+                <li><a href="#pay-now" data-tab="pay-now">
+                        <i class="fas fa-money-check-alt"></i> Pay Now
+                    </a></li>
+                <li><a href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a></li>
+            </ul>
+
+            <div class="theme-toggle">
+                <button id="theme-switch" class="btn btn-theme">
+                    <i class="fas fa-moon"></i>
+                    <span>Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <div class="welcome-section">
+                    <h1 class="user-name">Welcome, Reshob!</h1>
+                    <p>Here's an overview of your banking activities.</p>
+                </div>
+
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Total Balance</h3>
+                        <p class="card-value balance">₹9,12,345</p>
+                    </div>
+                    <div class="card">
+                        <h3>Last Transaction</h3>
+                        <p class="card-value text-success last-transaction" id="last-transaction">₹0</p>
+                    </div>
+                    <div class="card">
+                        <h3>Pending Transactions</h3>
+                        <p class="card-value text-danger" id="pending-trans">2</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- <!-- Transactions Tab -->
+            <section id="transactions" class="tab-content">
+                <div class="transactions-header">
+                    <h2>Money Transfer</h2>
+                    <div class="transaction-summary">
+                        <div class="summary-card available-balance">
+                            <i class="fas fa-wallet"></i>
+                            <div>
+                                <span>Available Balance</span>
+                                <p class="balance-left">₹9,12,345</p>
+                            </div>
+                        </div>
+                        <div class="summary-card daily-limit">
+                            <i class="fas fa-exchange-alt"></i>
+                            <div>
+                                <span>Daily Transfer Limit</span>
+                                <p class="transaction-limit">₹1,00,000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transactions-container">
+                    <div class="transaction-actions">
+                        <button id="send-money-btn" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Money
+                        </button>
+                        <button id="request-money-btn" class="btn btn-secondary">
+                            <i class="fas fa-hand-holding-usd"></i> Request Money
+                        </button>
+                    </div>
+
+                    <!-- requested money -->
+                    <div class="transaction-history">
+                        <h3>Pending Requests</h3>
+                        <table class="table transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>Username</th>
+                                    <th>Date</th>~
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-request-list">
+                                <!-- Real pending requests will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+
+                    <div class="transaction-history">
+                        <h3>Recent Transactions</h3>
+                        <table class="transaction-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transaction-list">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transaction History Tab -->
+            <section id="transaction-history" class="tab-content">
+                <h2>Transaction History</h2>
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-01-03</td>
+                            <td>Grocery Store</td>
+                            <td class="text-danger">-₹9,375</td>
+                            <td>Debit</td>
+                        </tr>
+                        <tr>
+                            <td>2025-01-02</td>
+                            <td>Electricity Bill</td>
+                            <td class="text-danger">-₹6,425</td>
+                            <td>Utility</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Balance Tab -->
+            <section id="balance" class="tab-content">
+                <h2>Account Balance</h2>
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Checking Account</h3>
+                        <p class="card-value balance-left-1">₹4,25,925</p>
+                    </div>
+                    <div class="card">
+                        <h3>Savings Account</h3>
+                        <p class="card-value balance-left-2">₹4,99,508</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pay Now Tab -->
+            <section id="pay-now" class="tab-content">
+                <h2>Quick Payment</h2>
+
+                <div class="payment-container">
+                    <div class="payment-options">
+                        <div class="payment-card">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h3>Mobile Recharge</h3>
+                            <p>Instant mobile top-up</p>
+                            <button class="btn btn-primary" data-payment-type="mobile">Pay Now</button>
+                        </div>
+
+                        <div class="payment-card">
+                            <i class="fas fa-lightbulb"></i>
+                            <h3>Electricity Bill</h3>
+                            <p>Pay your electricity provider</p>
+                            <button class="btn btn-primary" data-payment-type="electricity">Pay Now</button>
+                        </div>
+
+                        <div class="payment-card">
+                            <i class="fas fa-wifi"></i>
+                            <h3>Internet Bill</h3>
+                            <p>Broadband and internet services</p>
+                            <button class="btn btn-primary" data-payment-type="internet">Pay Now</button>
+                        </div>
+
+                        <div class="payment-card">
+                            <i class="fas fa-credit-card"></i>
+                            <h3>Credit Card</h3>
+                            <p>Pay credit card dues</p>
+                            <button class="btn btn-primary" data-payment-type="credit-card">Pay Now</button>
+                        </div>
+                    </div>
+
+                    <div class="payment-form" id="payment-form" style="display: none;">
+                        <h3 id="payment-form-title">Make Payment</h3>
+                        <form id="quick-payment-form">
+                            <div class="form-group">
+                                <label for="payment-type">Payment Type</label>
+                                <input type="text" id="payment-type" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="biller-details">Biller/Service Number</label>
+                                <input type="text" id="biller-details" placeholder="Enter biller or service number"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment-amount">Amount (₹)</label>
+                                <input type="number" id="payment-amount" placeholder="Enter amount" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="payment-method">Payment Method</label>
+                                <select id="payment-method" required>
+                                    <option value="">Select Payment Method</option>
+                                    <option value="bank-transfer">Bank Transfer</option>
+                                    <option value="neft">NEFT</option>
+                                    <option value="rtgs">RTGS</option>
+                                    <option value="imps">IMPS</option>
+                                </select>
+                            </div>
+
+                            <div class="payment-summary">
+                                <p>Service Charge: ₹0</p>
+                                <p>GST: ₹0</p>
+                                <h4 id="total-amount">Total: ₹0</h4>
+                            </div>
+
+                            <button type="submit" class="btn btn-success">Confirm Payment</button>
+                            <button type="button" id="cancel-payment" class="btn btn-secondary">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bank Statement Tab -->
+            <section id="bank-statement" class="tab-content">
+                <h2>Bank Statement</h2>
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Current Statement</h3>
+                        <button class="btn btn-primary" id="download-pdf">Download PDF</button>
+                        <button class="btn">Print Statement</button>
+                        <button class="btn">View</button>
+                    </div>
+                </div>
+            </section>
+            <!-- Container for Date-wise Bank Statement -->
+            <section id="date-wise-statement" class="tab-content">
+                <h2>Download Bank Statement by Date</h2>
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>Select Date</h3>
+                        <input type="date" id="statement-date" class="form-control">
+                        <button class="btn" onclick="downloadStatementByDate()">Download PDF</button>
+                        <button class="btn" onclick="viewStatementByDate()">View</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+<script src="dashboard.js"></script>
+<!-- Backend integration -->
+<script>
+    let user;
+    let user_details;
+    async function fetchUserData() {
+
+        try {
+            const response = await fetch('http://localhost:8080/api/user', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': localStorage.getItem('Token')
+                }
+            });
+
+            const data = await response.json();
+            console.log(data);
+            // if (data.success) {
+            user = data.user;
+            user_details = data.user_details;
+            console.log(user.firstName);
+            console.log(user_details[0].amount);
+
+
+            document.querySelector('.user-name').innerText = `Welcome,${user.firstName}!`;
+            document.querySelector('.balance').innerText = `₹${user_details[0].amount}`;
+            document.querySelector('.balance-left').innerHTML = `<strong>₹${user_details[0].amount}<strong>`;
+            document.querySelector('.balance-left-1').innerHTML = `<strong>₹${user_details[0].amount}<strong>`;
+            document.querySelector('.balance-left-2').innerHTML = `<strong>₹${user_details[0].amount}<strong>`;
+            document.querySelector('.transaction-limit').innerHTML = `<strong>₹${user_details[0].transaction_limit}<strong>`;
+
+            // document.querySelector('last-transaction').textContent = data.transactions[0]?.amount || '-';
+            // }
+        } catch (error) {
+            console.error('Failed to fetch user data:', error);
+        }
+    }
+
+    fetchUserData();
+</script>
+
+<script>
+    async function fetch_transaction_history() {
+        console.log('hi');
+
+        try {
+            const response = await fetch('http://localhost:8080/api/transaction-history', {
+                method: 'GET',
+                headers: {
+                    'token': `${localStorage.getItem('Token')}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            console.log(data);
+
+            // if (data.success) {
+            const transactions = data.transactions;
+            console.log('hi');
+
+            console.log(transactions);
+
+            // Update the "Last Transaction" in the sidebar
+            const lastTransaction = transactions[transactions.length - 1];
+            const lastTransactionAmount = lastTransaction.type == "Credit" ? `+₹${lastTransaction.amount}`
+                : `-₹${Math.abs(lastTransaction.amount)}`;
+            document.getElementById('last-transaction').innerText = lastTransactionAmount;
+
+            // Populate the transaction table
+            const transactionList = document.getElementById('transaction-list');
+            transactionList.innerHTML = ''; // Clear existing transactions
+
+            transactions.forEach(transaction => {
+                const transactionRow = document.createElement('tr');
+                transactionRow.innerHTML = `
+                    <td>${transaction.date.split('T')[0]}</td>
+                    <td>${(transaction.date.split('T'))[1]}</td>
+                    <td>${transaction.description}</td>
+                    <td class="${transaction.type == 'Credit' ? 'text-success' : 'text-danger'}">
+                        ${transaction.type == 'Credit' ? '+' : '-'} ₹${Math.abs(transaction.amount)}
+                    </td>
+                    <td class="${transaction.type == 'Credit' ? 'text-success' : 'text-danger'}">
+                        ${transaction.type}
+                    </td>
+                    <td>
+                        <span class="status-badge completed">Completed</span>
+                    </td>
+                `;
+                transactionList.appendChild(transactionRow);
+            });
+        } catch (error) {
+            console.error('Failed to fetch transaction history:', error);
+        }
+    }
+    fetch_transaction_history();
+</script>
+
+<script>
+    async function fetch_pending_requests() {
+        console.log('Fetching pending requests...');
+
+        try {
+            const response = await fetch('http://localhost:8080/api/pending-requests', {
+                method: 'GET',
+                headers: {
+                    'token': localStorage.getItem('Token'),
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            // Assuming `data` contains the pending requests
+            const pendingRequests = data;
+
+            // Update the pending requests table
+            const pendingRequestList = document.getElementById('pending-request-list');
+            pendingRequestList.innerHTML = ''; // Clear existing requests
+            let n=0;
+            pendingRequests.forEach(request => {
+                if(request.status!='Approved') n++;
+            });
+            document.getElementById('pending-trans').innerText = n;
+
+            pendingRequests.forEach(request => {
+                console.log('the request is ');
+                if (request.status != 'Approved') {
+                    console.log(request);
+
+                    // if (request.status != 'pending - AI') {
+
+                    const requestRow = document.createElement('tr');
+                    if (request.status != "pending - AI") {
+                        requestRow.innerHTML = `
+                            <td>${request.receiverId}</td>
+                            <td>${request.username}</td>
+                            <td>${request.createdAt.split('T')[0]}</td>
+                            <td>${request.amount}</td>
+                            <td>
+                                <button class="btn btn-success" id="approve-btn-${request._id}">
+                                    Approve
+                             </button>
+                             <button class="btn btn-danger" id="decline-btn-${request._id}">
+                                 Decline
+                                </button>
+                            </td>
+                        `;
+                        const approveButton = document.getElementById(`approve-btn-${request._id}`);
+                        const declineButton = document.getElementById(`decline-btn-${request._id}`);
+
+                    }
+                    else {
+                        requestRow.innerHTML = `
+                            <td>${request.receiverId}</td>
+                            <td>${request.username}</td>
+                            <td>${request.createdAt.split('T')[0]}</td>
+                            <td>${request.amount}</td>
+                            <td>
+                                Approve via Email
+                            </td>
+                        `;
+                    }
+                    // Append the row to the table
+                    pendingRequestList.appendChild(requestRow);
+
+                }
+                // Attach event listeners to the buttons
+                // const approveButton = document.getElementById(`approve-btn-${request._id}`);
+                // const declineButton = document.getElementById(`decline-btn-${request._id}`);
+
+                try{
+                    approveButton.onclick = () => approveRequest(request._id);
+                    declineButton.onclick = () => rejectRequest(request._id);
+                }
+                catch(e){
+                    console.log(e);
+                }
+            });
+
+        } catch (error) {
+            console.error('Failed to fetch pending requests:', error);
+        }
+    }
+
+    function approveRequest(requestId) {
+        console.log('hi from approve request');
+
+        fetch(`http://localhost:8080/api/approve-request`, {
+            method: 'POST', // Use POST method instead of PUT for approving a request
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: window.localStorage.getItem('Token').split(' ')[1],
+                requestId: requestId
+            }) // Send requestId in the body
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Request approved:', data);
+                fetch_pending_requests();  // Reload the table after approval
+            })
+            .catch(error => {
+                console.error('Error approving request:', error);
+            });
+    }
+
+    function rejectRequest(requestId) {
+        fetch(`http://localhost:8080/api/reject-request`, {  
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                 token: window.localStorage.getItem('Token').split(' ')[1],
+                requestId: requestId 
+            }) 
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Request rejected:', data);
+                fetch_pending_requests();  // Reload the table after rejection
+            })
+            .catch(error => {
+                console.error('Error rejecting request:', error);
+            });
+    }
+
+    
+    fetch_pending_requests();
+
+
+</script>
+
+
+<!-- Add this script tag in the <head> section of your HTML file -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- Add jsPDF library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Add autoTable plugin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    // Function to fetch transaction history and generate PDF
+    function downloadBankStatementPDF() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            console.error("No token found, please log in.");
+            return;
+        }
+
+        fetch('http://localhost:8080/api/transaction-history', {
+            method: 'GET',
+            headers: {
+                'token': `${localStorage.getItem('Token')}`,
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const transactions = data.transactions || []; // Assume data is an array of transactions
+
+                console.log('hi');
+                console.log(transactions);
+
+                // Initialize jsPDF
+                const { jsPDF } = window.jspdf;  // Get jsPDF from the global window object
+                const doc = new jsPDF();
+                doc.setFontSize(18);
+                doc.text("Bank Statement", 14, 20);
+                doc.setFontSize(12);
+                doc.text(`Account Number: ${data.user_id}`, 14, 30);
+                // doc.text(`Account Holder: ${data[0].username}`, 14, 40);
+
+                const headers = ["Date", "Description", "Amount", "Type"];
+                const rows = transactions.map(transaction => [
+                    transaction.date,
+                    transaction.description,
+                    transaction.amount,
+                    transaction.type
+                ]);
+
+                doc.autoTable({
+                    head: [headers],
+                    body: rows,
+                    startY: 50,
+                    theme: 'striped'
+                });
+
+                doc.save('bank_statement.pdf');
+
+            })
+            .catch(error => {
+                console.error("Error fetching transaction history:", error);
+            });
+    }
+    document.getElementById("download-pdf").addEventListener("click", downloadBankStatementPDF);
+    fetchUserData();
+
+</script>
+
+<script src="logout.js"></script>
+
+
+</html>
