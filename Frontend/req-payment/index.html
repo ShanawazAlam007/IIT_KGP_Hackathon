@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+    <div id="payment-gateway" class="payment-gateway">
+        <form id="payment-form">
+            <div class="payment-form-header">
+                <h3 id="payment-form-title">Request Money</h3>
+                <p id="payment-form-subtitle">Securely transfer funds to another bank account</p>
+            </div>
+
+            <div class="payment-form-body">
+                <div class="form-group recipient-group">
+                    <label for="recipient">Sender's Bank Account</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-university"></i></span>
+                        <input type="text" id="recipient" name="recipient" placeholder="Enter Bank Account Number"
+                            required maxlength="25">
+                        <span class="input-validation">
+                            <i class="fas fa-check-circle valid-icon"></i>
+                            <i class="fas fa-times-circle invalid-icon"></i>
+                        </span>
+                    </div>
+                    <small class="form-text text-muted">Enter 9-18 digit bank account number</small>
+                </div>
+
+                <div class="form-group amount-group">
+                    <label for="amount">Amount</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-rupee-sign"></i></span>
+                        <input type="number" id="amount" name="amount" min="1" max="100000" placeholder="Enter amount"
+                            required>
+                        <span class="input-validation">
+                            <i class="fas fa-check-circle valid-icon"></i>
+                            <i class="fas fa-times-circle invalid-icon"></i>
+                        </span>
+                    </div>
+                    <small class="form-text text-muted">Maximum limit: ₹1,00,000 per day</small>
+                </div>
+
+                <div class="form-group method-group">
+                    <label for="payment-method">Payment Method</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-exchange-alt"></i></span>
+                        <select id="payment-method" name="payment-method" required>
+                            <option value="">Select Payment Method</option>
+                            <option value="bank-transfer">Bank Transfer</option>
+                            <option value="neft">NEFT</option>
+                            <option value="rtgs">RTGS</option>
+                            <option value="imps">IMPS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group description-group">
+                    <label for="description">Description (Optional)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fas fa-comment-dots"></i></span>
+                        <input type="text" id="description" name="description" placeholder="Add a note">
+                    </div>
+                </div>
+            </div>
+
+            <div class="payment-form-footer">
+                <div class="payment-actions">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-paper-plane"></i> Request Transfer
+                    </button>
+                    <button type="button" id="cancel-payment" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+
+                <div class="payment-security">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Secure & Encrypted Transaction</span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Cancel Payment -->
+    <script>
+        document.getElementById('cancel-payment').addEventListener('click', function () {
+            alert("Click ok to confirm cancel the payment");
+            window.location.href = '../dashboard_page/dashboard.html';
+        });
+    </script>
+
+    <!-- // backend connection -->
+    <!-- <script>
+
+        const form = document.getElementById('payment-form');
+
+        form.addEventListener('submit', async (e) => {
+            console.log('hi');
+            
+            e.preventDefault();
+
+            // Collect form data
+            const formData = new FormData(form);
+
+            // Destructure form data into an object
+            const data = {
+                receiverId: formData.get('recipient'),
+                amount: formData.get('amount'),
+                paymentMethod: formData.get('payment-method'),
+                description: formData.get('description'),
+                // receiverId: document.getElementById('receiver-id').value, 
+                token: (localStorage.getItem('Token').split(' '))[1]
+            };
+
+            console.log('Destructured Form Data:', data);
+
+            try {
+
+                const response = await fetch('http://localhost:8080/api/request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                if (response.ok) {
+                    alert('Request successful.. Redirecting to the dashboard');
+                    window.location.href = '../dashboard_page/dashboard.html'
+                } else {
+                    console.error('Request failed');
+                    const errorData = await response.json();
+                    console.error('Error:', errorData.message);
+                }
+            } catch (err) {
+                console.error('Error while processing payment:', err.message);
+            }
+        });
+    </script> -->
+
+    <script>
+        const form = document.getElementById('payment-form');
+    
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+    
+            // Validate input fields before proceeding
+            const recipient = document.getElementById('recipient').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            
+            // if (!recipient || recipient.length < 9 || recipient.length > 18) {
+            //     alert('Please enter a valid bank account number (9-18 digits).');
+            //     return;
+            // }
+            
+            // if (!amount || amount <= 0 || amount > 100000) {
+            //     alert('Amount should be between ₹1 and ₹1,00,000.');
+            //     return;
+            // }
+    
+            // Collect form data
+            const formData = new FormData(form);
+    
+            // Destructure form data into an object
+            const data = {
+                receiverId: formData.get('recipient'),
+                amount: formData.get('amount'),
+                paymentMethod: formData.get('payment-method'),
+                description: formData.get('description'),
+                token: (localStorage.getItem('Token').split(' '))[1]
+            };
+    
+            try {
+                const response = await fetch('http://localhost:8080/api/request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+    
+                if (response.ok) {
+                    alert('Request successful.. Redirecting to the dashboard');
+                    window.location.href = '../dashboard_page/dashboard.html';
+                } else {
+                    const errorData = await response.json();
+                    alert('Error: ' + errorData.message);
+                    console.error('Error:', errorData.message);
+                }
+            } catch (err) {
+                console.error('Error while processing payment:', err.message);
+                alert('An error occurred while processing the payment. Please try again.');
+            }
+        });
+    </script>
+    
+</body>
+
+</html>
