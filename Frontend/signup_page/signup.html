@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeBank - Sign Up</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="top-banner">
+        <span><i class="fas fa-lock"></i> Secure Online Banking</span>
+        <span><i class="fas fa-mobile-alt"></i> 24/7 Support: 1-800-SAFEBANK</span>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <i class="fas fa-university"></i>
+            <h1>SafeBank</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="active"><i class="fas fa-home"></i> Home</a>
+            <a href="#"><i class="fas fa-info-circle"></i> About</a>
+            <a href="#"><i class="fas fa-briefcase"></i> Services</a>
+            <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+        </div>
+    </nav>
+
+    <main class="signup-container">
+        <div class="signup-box">
+            <h2><i class="fas fa-user-plus"></i> Create Your Account</h2>
+            
+            <div class="signup-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="personal-info">
+                        <i class="fas fa-user"></i> Personal Info
+                    </button>
+                    <button class="tab-btn" data-tab="contact-info">
+                        <i class="fas fa-address-card"></i> Contact Info
+                    </button>
+                    <button class="tab-btn" data-tab="account-info">
+                        <i class="fas fa-lock"></i> Create Password
+                    </button>
+                </div>
+
+                <form id="signup-form">
+                    <div class="tab-content active" id="personal-info">
+                        <div class="form-group">
+                            <label for="first-name"><i class="fas fa-user"></i> First Name</label>
+                            <input type="text" id="first-name" name="first-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middle-name"><i class="fas fa-user"></i> Middle Name</label>
+                            <input type="text" id="middle-name" name="middle-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name"><i class="fas fa-user"></i> Last Name</label>
+                            <input type="text" id="last-name" name="last-name" required>
+                        </div>
+                        <button type="button" class="next-tab">Next</button>
+                    </div>
+
+                    <div class="tab-content" id="contact-info">
+                        <div class="form-group">
+                            <label for="phone-number"><i class="fas fa-mobile-alt"></i> Phone Number</label>
+                            <input type="tel" id="phone-number" name="phone-number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date-of-birth"><i class="fas fa-calendar"></i> Date of Birth</label>
+                            <input type="date" id="date-of-birth" name="date-of-birth" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="tab-navigation">
+                            <button type="button" class="prev-tab">Previous</button>
+                            <button type="button" class="next-tab">Next</button>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="account-info">
+                        <div class="form-group">
+                            <label for="password"><i class="fas fa-lock"></i> Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm-password"><i class="fas fa-lock"></i> Confirm Password</label>
+                            <input type="password" id="confirm-password" name="confirm-password" required>
+                        </div>
+                        <div class="tab-navigation">
+                            <button type="button" class="prev-tab">Previous</button>
+                            <button type="submit" class="signup-btn">Create Account</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="login-link">
+                Already have an account? <a href="../log_in_page/login.html">Log In</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="#">Home</a>
+            <a href="#">About Us</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div>
+        <div class="footer-section">
+            <h3>Legal</h3>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Security</a>
+        </div>
+        <div class="footer-section">
+            <h3>Support</h3>
+            <a href="#">Help Center</a>
+            <a href="#">FAQ</a>
+            <a href="#">Customer Support</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 SafeBank. All Rights Reserved.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const nextButtons = document.querySelectorAll('.next-tab');
+            const prevButtons = document.querySelectorAll('.prev-tab');
+            const form = document.getElementById('signup-form');
+
+            function validatePersonalInfo() {
+                const firstName = document.getElementById('first-name');
+                const lastName = document.getElementById('last-name');
+
+                if (firstName.value.trim() === '') {
+                    alert('Please enter your first name');
+                    firstName.focus();
+                    return false;
+                }
+
+                if (lastName.value.trim() === '') {
+                    alert('Please enter your last name');
+                    lastName.focus();
+                    return false;
+                }
+
+                return true;
+            }
+
+            function validateContactInfo() {
+                const phoneNumber = document.getElementById('phone-number');
+                const dateOfBirth = document.getElementById('date-of-birth');
+                const email = document.getElementById('email');
+
+                // Phone number validation (basic)
+                const phoneRegex = /^[0-9]{10}$/;
+                if (!phoneRegex.test(phoneNumber.value.trim())) {
+                    alert('Please enter a valid 10-digit phone number');
+                    phoneNumber.focus();
+                    return false;
+                }
+
+                // Date of birth validation
+                if (dateOfBirth.value === '') {
+                    alert('Please enter your date of birth');
+                    dateOfBirth.focus();
+                    return false;
+                }
+
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email.value.trim())) {
+                    alert('Please enter a valid email address');
+                    email.focus();
+                    return false;
+                }
+
+                return true;
+            }
+
+            function validateAccountInfo() {
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirm-password');
+
+                // Password validation
+                if (password.value.length < 8) {
+                    alert('Password must be at least 8 characters long');
+                    password.focus();
+                    return false;
+                }
+
+                // Password match validation
+                if (password.value !== confirmPassword.value) {
+                    alert('Passwords do not match');
+                    confirmPassword.focus();
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Tab Button Click
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    button.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Next Tab
+            nextButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const currentTab = button.closest('.tab-content');
+                    
+                    // Validate based on current tab
+                    let isValid = true;
+                    if (currentTab.id === 'personal-info') {
+                        isValid = validatePersonalInfo();
+                    } else if (currentTab.id === 'contact-info') {
+                        isValid = validateContactInfo();
+                    }
+
+                    if (isValid) {
+                        const nextTab = currentTab.nextElementSibling;
+                        const nextTabButton = document.querySelector(`.tab-btn[data-tab="${nextTab.id}"]`);
+                        
+                        // Remove active class from all
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        tabContents.forEach(content => content.classList.remove('active'));
+                        
+                        // Add active class to next tab
+                        nextTabButton.classList.add('active');
+                        nextTab.classList.add('active');
+                    }
+                });
+            });
+
+            // Previous Tab
+            prevButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const currentTab = button.closest('.tab-content');
+                    const prevTab = currentTab.previousElementSibling;
+                    const prevTabButton = document.querySelector(`.tab-btn[data-tab="${prevTab.id}"]`);
+                    
+                    // Remove active class from all
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to previous tab
+                    prevTabButton.classList.add('active');
+                    prevTab.classList.add('active');
+                });
+            });
+
+            // Form Submission
+            // form.addEventListener('submit', function(event) {
+            //     event.preventDefault();
+
+            //     // Validate all sections
+            //     if (validatePersonalInfo() && validateContactInfo() && validateAccountInfo()) {
+                    
+            //         alert('Form submitted successfully!');
+                    
+            //     }
+            // });
+        });
+    </script>
+
+    <!-- //backend integration -->
+     <script>
+        console.log('hi from script ');
+        
+        document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.querySelector('.signup-box');
+    
+    signupForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const personalInfo = {
+            firstName: document.getElementById('first-name').value,
+            middleName: document.getElementById('middle-name').value,
+            lastName: document.getElementById('last-name').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            mobile_no: document.getElementById('phone-number').value,
+            DOB: document.getElementById('date-of-birth').value
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(personalInfo)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to signup: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log('Success:', data);
+            alert('Signup successful! Please Complete your KYC to activate your account.');
+            window.location.href = 'http:localhost:5000/'
+
+        } catch (error) {
+            console.log('Error:', error);
+            alert('Signup failed! try again ');
+            window.location.href='./signup.html';
+        }
+    });
+});
+</script>
+
+</body>
+</html>
