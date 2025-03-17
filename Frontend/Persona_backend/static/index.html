@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona - Identity Verification</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-fluid vh-100 d-flex flex-column">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="../landing_page/index.html">
+                    <i class="bi bi-shield-check me-2"></i>Persona
+                </a>
+                <div class="ms-auto">
+                    <span class="support-text">
+                        <i class="bi bi-headset me-2"></i>Support: +91 7044779074
+                    </span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="row flex-grow-1 align-items-center justify-content-center">
+            <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+                <div class="verification-card animate-fade-in">
+                    <div class="progress-bar-container mb-4">
+                        <div class="progress-steps">
+                            <div class="step active" data-step="1">
+                                <div class="step-circle">1</div>
+                                <div class="step-label">Personal Info</div>
+                            </div>
+                            <div class="step" data-step="2">
+                                <div class="step-circle">2</div>
+                                <div class="step-label">Documents</div>
+                            </div>
+                            <div class="step" data-step="3">
+                                <div class="step-circle">3</div>
+                                <div class="step-label">Verification</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="container mt-5">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8">
+                                    <div id="errorDiv" class="alert alert-danger d-none"></div>
+                                    <div id="successDiv" class="alert alert-success d-none"></div>
+                                    <div id="loadingDiv" class="alert alert-info d-none">
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <span id="loadingMessage" class="ms-2">Processing...</span>
+                                    </div>
+
+                                    <!-- Verification Results Modal -->
+                                    <div class="modal fade" id="resultsModal" tabindex="-1"
+                                        aria-labelledby="resultsModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="resultsModalLabel">Verification Results
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body" id="resultsModalBody">
+                                                    <!-- Results will be inserted here -->
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <form id="verificationForm" class="needs-validation" novalidate>
+                                        <!-- Step 1: Personal Information -->
+                                        <div class="form-step" id="step1">
+                                            <h3 class="text-center mb-4">Personal Information</h3>
+                                            <div class="mb-4">
+                                                <label for="fullName" class="form-label">Full Name</label>
+                                                <input type="text" class="form-control" id="fullName" required>
+                                                <div class="invalid-feedback">Please enter your full name</div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="email" class="form-label">Email Address</label>
+                                                <input type="email" class="form-control" id="email" required>
+                                                <div class="invalid-feedback">Please enter a valid email address</div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="phone" class="form-label">Phone Number</label>
+                                                <input type="tel" class="form-control" id="phone" required>
+                                                <div class="invalid-feedback">Please enter your phone number</div>
+                                            </div>
+                                            <div class="d-grid">
+                                                <button type="button"
+                                                    class="btn btn-primary next-step">Continue</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Step 2: Document Upload -->
+                                        <div class="form-step d-none" id="step2">
+                                            <h3 class="text-center mb-4">Document Verification</h3>
+                                            <div class="upload-container mb-4">
+                                                <label class="form-label">Government ID</label>
+                                                <div class="upload-box" id="govIdUploadBox">
+                                                    <input type="file" id="govIdUpload" accept="image/*" class="d-none">
+                                                    <div class="upload-content">
+                                                        <i class="bi bi-cloud-upload"></i>
+                                                        <p class="mt-2">Drag & drop your ID here or click to browse</p>
+                                                        <small class="text-muted">Supported formats: JPG, PNG (Max
+                                                            5MB)</small>
+                                                    </div>
+                                                </div>
+                                                <div id="govIdPreview" class="mt-3"></div>
+                                            </div>
+                                            <div class="d-flex gap-3">
+                                                <button type="button"
+                                                    class="btn btn-outline-secondary prev-step">Back</button>
+                                                <button type="button"
+                                                    class="btn btn-primary flex-grow-1 next-step">Continue</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Step 3: Selfie Verification -->
+                                        <div class="form-step d-none" id="step3">
+                                            <h3 class="text-center mb-4">Selfie Verification</h3>
+                                            <p class="text-muted text-center">Please take clear photos of your face from
+                                                different angles</p>
+
+                                            <div class="camera-container mb-4">
+                                                <div id="cameraError" class="alert alert-danger d-none"></div>
+                                                <video id="videoInput" class="camera-preview" autoplay playsinline
+                                                    muted></video>
+                                                <canvas id="captureCanvas" class="d-none"></canvas>
+                                            </div>
+
+                                            <div class="capture-boxes mb-4">
+                                                <div class="capture-box active" data-angle="front">
+                                                    <img src="placeholder-selfie.png" alt="Front View">
+                                                    <span>Front View</span>
+                                                </div>
+                                                <div class="capture-box" data-angle="left">
+                                                    <img src="placeholder-selfie.png" alt="Left View">
+                                                    <span>Left View</span>
+                                                </div>
+                                                <div class="capture-box" data-angle="right">
+                                                    <img src="placeholder-selfie.png" alt="Right View">
+                                                    <span>Right View</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex gap-3 mt-4">
+                                                <button type="button"
+                                                    class="btn btn-outline-secondary prev-step">Back</button>
+                                                <button type="button" class="btn btn-primary flex-grow-1"
+                                                    id="captureBtn">
+                                                    <i class="bi bi-camera"></i> Capture Photo
+                                                </button>
+                                                <button type="button" class="btn btn-success" id="verifyButton"
+                                                    >
+                                                    <i class="bi bi-check-circle"></i> Verify
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+                                            Verify Identity
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="py-3">
+            <div class="container text-center">
+                <p class="mb-0">
+                    <i class="bi bi-shield-lock me-2"></i>
+                    &copy; 2025 Persona | Project Made by Kira xD
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+    <!-- <script>
+        class PersonaVerification {
+            constructor() {
+                // Initialize elements
+                this.form = document.getElementById('verificationForm');
+                this.steps = document.querySelectorAll('.form-step');
+                this.nextButtons = document.querySelectorAll('.next-step');
+                this.prevButtons = document.querySelectorAll('.prev-step');
+                this.currentStep = 1;
+
+                // Message elements
+                this.successDiv = document.getElementById('successDiv');
+                this.errorDiv = document.getElementById('errorDiv');
+                this.loadingDiv = document.getElementById('loadingDiv');
+                this.loadingMessage = document.getElementById('loadingMessage');
+
+                // Camera elements
+                this.videoInput = document.getElementById('videoInput');
+                this.captureCanvas = document.getElementById('captureCanvas');
+                this.captureBtn = document.getElementById('captureBtn');
+
+                // Results modal
+                this.resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+                this.resultsModalBody = document.getElementById('resultsModalBody');
+
+                // Initialize selfies object
+                this.selfies = {
+                    front: null,
+                    left: null,
+                    right: null
+                };
+
+                this.governmentId = null;
+                this.stream = null;
+
+                // Initialize event listeners
+                this.initializeEventListeners();
+                this.initializeFileUpload();
+            }
+
+            initializeEventListeners() {
+                // Form submission
+                this.form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    await this.handleSubmit();
+                });
+
+                // Next button clicks
+                this.nextButtons.forEach(button => {
+                    button.addEventListener('click', () => this.nextStep());
+                });
+
+                // Previous button clicks
+                this.prevButtons.forEach(button => {
+                    button.addEventListener('click', () => this.prevStep());
+                });
+
+                // Capture button click
+                const captureBtn = document.getElementById('captureBtn');
+                if (captureBtn) {
+                    captureBtn.addEventListener('click', () => this.captureSelfie());
+                }
+
+                // Initialize capture boxes
+                const captureBoxes = document.querySelectorAll('.capture-box');
+                captureBoxes.forEach(box => {
+                    box.addEventListener('click', () => {
+                        // Remove active class from all boxes
+                        captureBoxes.forEach(b => b.classList.remove('active'));
+                        // Add active class to clicked box
+                        box.classList.add('active');
+                    });
+                });
+
+                // Set front view as default active
+                const frontBox = document.querySelector('.capture-box[data-angle="front"]');
+                if (frontBox) {
+                    frontBox.classList.add('active');
+                }
+
+                // Verify button click
+                // const verifyButton = document.getElementById('verifyButton');
+                // if (verifyButton) {
+                //     verifyButton.addEventListener('click', () => this.verifyIdentity());
+                // }
+
+                const verifyButton = document.getElementById('verifyButton');
+                // if (verifyButton) {
+                    verifyButton.addEventListener('click', (event) => {
+                        event.preventDefault(); // Prevent the default form submission behavior
+                        this.verifyIdentity();
+                    });
+                // }
+
+            }
+
+            initializeFileUpload() {
+                const uploadBox = document.getElementById('govIdUploadBox');
+                const fileInput = document.getElementById('govIdUpload');
+                const previewDiv = document.getElementById('govIdPreview');
+
+                // Prevent default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadBox.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+
+                // Add visual feedback
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadBox.addEventListener(eventName, () => {
+                        uploadBox.classList.add('highlight');
+                    });
+                });
+
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadBox.addEventListener(eventName, () => {
+                        uploadBox.classList.remove('highlight');
+                    });
+                });
+
+                // Handle dropped files
+                uploadBox.addEventListener('drop', (e) => {
+                    const file = e.dataTransfer.files[0];
+                    if (file) {
+                        this.handleFileUpload(file);
+                    }
+                });
+
+                // Handle file input change
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        this.handleFileUpload(file);
+                    }
+                });
+
+                // Handle click to upload
+                uploadBox.addEventListener('click', () => {
+                    fileInput.click();
+                });
+            }
+
+            handleFileUpload(file) {
+                const previewDiv = document.getElementById('govIdPreview');
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    this.showError('Please upload an image file');
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    this.showError('File size too large. Maximum size is 5MB');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Store the base64 data
+                    this.governmentId = e.target.result;
+
+                    // Show preview
+                    previewDiv.innerHTML = `
+                <div class="position-relative">
+                    <img src="${e.target.result}" class="img-fluid rounded" alt="ID Preview">
+                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2" 
+                            onclick="document.getElementById('govIdUpload').value = ''; 
+                                    document.getElementById('govIdPreview').innerHTML = '';">
+                        <i class="bi bi-x"></i>
+                    </button>
+                </div>
+            `;
+
+                    // Show success message
+                    this.showSuccess('Document uploaded successfully');
+
+                    // Update upload box
+                    const uploadBox = document.getElementById('govIdUploadBox');
+                    uploadBox.classList.add('uploaded');
+                };
+
+                reader.onerror = () => {
+                    this.showError('Error reading file. Please try again.');
+                };
+
+                reader.readAsDataURL(file);
+            }
+
+            async initCamera() {
+                try {
+                    // Request camera access with specific constraints
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            width: { ideal: 1280 },
+                            height: { ideal: 720 },
+                            facingMode: 'user'
+                        },
+                        audio: false
+                    });
+
+                    // Store the stream and set up video element
+                    this.stream = stream;
+                    this.videoInput.srcObject = stream;
+
+                    // Wait for video to be loaded
+                    await new Promise((resolve) => {
+                        this.videoInput.onloadedmetadata = () => {
+                            this.videoInput.play().then(resolve);
+                        };
+                    });
+
+                    // Show success message
+                    this.showSuccess('Camera initialized successfully');
+
+                    // Show camera container
+                    const cameraContainer = document.querySelector('.camera-container');
+                    if (cameraContainer) {
+                        cameraContainer.style.display = 'block';
+                    }
+
+                } catch (error) {
+                    console.error('Camera initialization error:', error);
+                    const errorMessage = this.getCameraErrorMessage(error);
+                    this.showError(errorMessage);
+
+                    // Show error in camera container
+                    const cameraContainer = document.querySelector('.camera-container');
+                    if (cameraContainer) {
+                        cameraContainer.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        ${errorMessage}
+                    </div>
+                `;
+                    }
+                }
+            }
+
+            getCameraErrorMessage(error) {
+                switch (error.name) {
+                    case 'NotAllowedError':
+                        return 'Camera access denied. Please allow camera access in your browser settings.';
+                    case 'NotFoundError':
+                        return 'No camera found. Please connect a camera and try again.';
+                    case 'NotReadableError':
+                        return 'Camera is in use by another application. Please close other apps using the camera.';
+                    default:
+                        return `Camera error: ${error.message}`;
+                }
+            }
+
+            nextStep() {
+                if (this.currentStep < 3) {
+                    document.querySelector(`[data-step="${this.currentStep}"]`).classList.remove('active');
+                    this.steps[this.currentStep - 1].classList.add('d-none');
+
+                    this.currentStep++;
+
+                    document.querySelector(`[data-step="${this.currentStep}"]`).classList.add('active');
+                    this.steps[this.currentStep - 1].classList.remove('d-none');
+
+                    // Initialize camera on step 3
+                    if (this.currentStep === 3) {
+                        this.initCamera();
+                    }
+                }
+            }
+
+            prevStep() {
+                if (this.currentStep > 1) {
+                    document.querySelector(`[data-step="${this.currentStep}"]`).classList.remove('active');
+                    this.steps[this.currentStep - 1].classList.add('d-none');
+
+                    this.currentStep--;
+
+                    document.querySelector(`[data-step="${this.currentStep}"]`).classList.add('active');
+                    this.steps[this.currentStep - 1].classList.remove('d-none');
+                }
+            }
+
+            validateCurrentStep() {
+                const currentStepElement = this.steps[this.currentStep - 1];
+                const inputs = currentStepElement.querySelectorAll('input[required]');
+                let isValid = true;
+
+                inputs.forEach(input => {
+                    if (!input.value) {
+                        isValid = false;
+                        input.classList.add('is-invalid');
+                    } else {
+                        input.classList.remove('is-invalid');
+                    }
+                });
+
+                return isValid;
+            }
+
+            async startCamera() {
+                // Add camera UI elements if they don't exist
+                if (!document.getElementById('cameraError')) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.id = 'cameraError';
+                    errorDiv.className = 'alert alert-danger d-none';
+                    document.getElementById('cameraContainer').before(errorDiv);
+                }
+
+                await this.initCamera();
+
+                // Add event listener for visibility change
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        // Stop camera when tab is not visible
+                        if (this.stream) {
+                            this.stream.getTracks().forEach(track => track.stop());
+                        }
+                    } else {
+                        // Restart camera when tab becomes visible
+                        this.initCamera();
+                    }
+                });
+            }
+
+            stopCamera() {
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                    this.stream = null;
+                    this.videoInput.srcObject = null;
+                }
+            }
+
+            captureSelfie() {
+                try {
+                    // Get the active capture box
+                    const activeBox = document.querySelector('.capture-box.active');
+                    if (!activeBox) {
+                        this.showError('Please select a capture angle (Front, Left, or Right)');
+                        return;
+                    }
+
+                    const angle = activeBox.dataset.angle;
+
+                    // Set up canvas
+                    const context = this.captureCanvas.getContext('2d');
+                    this.captureCanvas.width = this.videoInput.videoWidth;
+                    this.captureCanvas.height = this.videoInput.videoHeight;
+
+                    // Draw the video frame to the canvas
+                    context.save();
+                    context.scale(-1, 1); // Flip horizontally
+                    context.translate(-this.captureCanvas.width, 0);
+                    context.drawImage(this.videoInput, 0, 0);
+                    context.restore();
+
+                    // Convert to base64
+                    const imageData = this.captureCanvas.toDataURL('image/jpeg', 0.8);
+
+                    // Update preview and store data
+                    const img = activeBox.querySelector('img');
+                    if (img) {
+                        img.src = imageData;
+                        this.selfies[angle] = imageData;
+
+                        // Add captured class
+                        activeBox.classList.add('captured');
+
+                        // Show success message
+                        this.showSuccess(`${angle} view captured successfully!`);
+
+                        // Check if we have all required selfies
+                        if (this.selfies.front) {
+                            // Enable verification if we have at least the front view
+                            const verifyBtn = document.getElementById('verifyButton');
+                            if (verifyBtn) {
+                                verifyBtn.disabled = false;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error capturing selfie:', error);
+                    this.showError('Failed to capture photo. Please try again.');
+                }
+            }
+
+            async verifyIdentity() {
+                try {
+                    this.showLoading('Verifying your identity...');
+
+                    // Create form data
+                    const formData = new FormData();
+
+                    // Add government ID if available
+                    if (this.governmentId) {
+                        formData.append('government_id', this.dataURLtoBlob(this.governmentId), 'government_id.jpg');
+                    } else {
+                        console.log('error in gov id');
+
+                        throw new Error('Please upload your government ID first');
+                    }
+
+                    // Add front selfie if available
+                    if (this.selfies.front) {
+                        formData.append('selfie_front', this.dataURLtoBlob(this.selfies.front), 'selfie_front.jpg');
+                    } else {
+                        console.log('error in selfies');
+
+                        throw new Error('Please take a front view selfie');
+                    }
+
+                    console.log(formData);
+
+
+                    // Send verification request to the correct Flask backend URL
+                    const response = await fetch('http://127.0.0.1:5000/verify', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        // throw new Error(errorData.message || 'Verification failed. Please try again.');
+                        console.log(errorData);
+                    }
+
+                    console.alert("passed");
+                    alert("passed");
+                    const result = await response.json();
+                    console.log(result);
+                    // Handle verification result
+                    if (result.success) {
+                        // this.showSuccess('Verification successful!');
+                        // this.displayResults(result);
+                        console.alert("verification successfull");
+                        window.location.href = "../../frontend/log_in_page/login.html";
+                    }
+                    else {
+                        throw new Error(result.message || 'Verification failed. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    this.showError(error.message);
+                }
+                finally {
+                    this.hideLoading();
+                }
+            }
+
+            dataURLtoBlob(dataURL) {
+                // Convert base64 to raw binary data held in a string
+                const byteString = atob(dataURL.split(',')[1]);
+
+                // Separate out the mime component
+                const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
+
+                // Write the bytes of the string to an ArrayBuffer
+                const ab = new ArrayBuffer(byteString.length);
+                const ia = new Uint8Array(ab);
+
+                for (let i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+
+                return new Blob([ab], { type: mimeString });
+            }
+        }
+       
+        new PersonaVerification();
+       
+
+    </script> -->
+</body>
+
+</html>

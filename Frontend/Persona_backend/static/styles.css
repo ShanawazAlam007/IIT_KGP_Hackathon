@@ -1,0 +1,416 @@
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --background: #f8fafc;
+    --border: #e2e8f0;
+    --white: #ffffff;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    color: var(--text);
+}
+
+/* Navbar Styles */
+.navbar {
+    background: var(--white);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.navbar-brand i {
+    font-size: 1.8rem;
+}
+
+.support-text {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Verification Card */
+.verification-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* Progress Steps */
+.progress-bar-container {
+    padding: 2rem 1rem;
+    background: linear-gradient(to right, var(--primary), var(--primary-dark));
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%);
+}
+
+.step {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.step-circle {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: 600;
+    margin: 0 auto 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.step.active .step-circle {
+    background: var(--white);
+    color: var(--primary);
+}
+
+.step-label {
+    color: var(--white);
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.step.active .step-label {
+    opacity: 1;
+}
+
+/* Form Controls */
+.form-control {
+    border: 1px solid var(--border);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Upload Box */
+.upload-box {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    padding: 2rem;
+    text-align: center;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-box:hover {
+    border-color: #007bff;
+    background: #f1f8ff;
+}
+
+.upload-box.highlight {
+    border-color: #007bff;
+    background: #e3f2fd;
+    transform: scale(1.02);
+}
+
+.upload-box.uploaded {
+    border-color: #28a745;
+    background: #f8fff8;
+}
+
+.upload-content {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.upload-box i {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+}
+
+.upload-box p {
+    margin: 0;
+    color: #495057;
+    font-weight: 500;
+}
+
+.upload-box small {
+    display: block;
+    margin-top: 0.5rem;
+}
+
+#govIdPreview {
+    text-align: center;
+}
+
+#govIdPreview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upload-preview {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.upload-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Camera Container */
+.camera-container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.camera-preview {
+    width: 100%;
+    height: auto;
+    transform: scaleX(-1); /* Mirror the video */
+    background: #000;
+    border-radius: 8px;
+}
+
+.capture-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.capture-box {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.capture-box:hover {
+    border-color: #007bff;
+}
+
+.capture-box.active {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.capture-box.captured {
+    border-color: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25);
+}
+
+.capture-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.capture-box span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    text-align: center;
+    padding: 4px;
+    font-size: 12px;
+}
+
+#captureBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+#captureBtn i {
+    font-size: 1.2rem;
+}
+
+/* Camera error styles */
+#cameraError {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    z-index: 10;
+}
+
+#cameraError button {
+    margin-top: 1rem;
+}
+
+/* Captured Images */
+.captured-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.capture-box {
+    background: var(--background);
+    border-radius: 8px;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.capture-box img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.capture-box span {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background: var(--success);
+    border-color: var(--success);
+}
+
+.btn-outline-secondary {
+    border-color: var(--border);
+    color: var(--text);
+}
+
+/* Success/Error Messages */
+.verification-success,
+.verification-error {
+    padding: 2rem;
+}
+
+.success-icon,
+.error-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.success-icon {
+    color: var(--success);
+}
+
+.error-icon {
+    color: var(--danger);
+}
+
+/* Animations */
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+footer {
+    background: var(--white);
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .progress-steps {
+        padding: 0 1rem;
+    }
+
+    .step-label {
+        font-size: 0.8rem;
+    }
+
+    .captured-images {
+        grid-template-columns: 1fr;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
